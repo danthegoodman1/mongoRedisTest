@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const {io, app} = require("./http")
 
-mongoose.connect("mongodb+srv://dan:dan@cluster0-uxq2y.gcp.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb+srv://dan:dan@cluster0-uxq2y.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
 
 const db = mongoose.connection
 
@@ -55,6 +55,7 @@ db.once("open", () => {
         switch (event.operationType) {
         case "delete":
             console.log(`${event.documentKey._id} was deleted`)
+            io.emit("delete", event.documentKey_id)
             break
 
         case "insert":
