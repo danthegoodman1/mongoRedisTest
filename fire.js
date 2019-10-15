@@ -23,7 +23,14 @@ const userSchema = new mongoose.Schema({
     lastName: {
         type: String
     }
-})
+}, {
+    timestamps: true,
+    writeConcern: {
+        w: "majority",
+        j: true,
+        wtimeout: 10000
+    }
+}) // Adds timestamps for createdAt and updatedAt, write concern
 
 // Define model from schema
 const User = mongoose.model("User", userSchema, "Users")
