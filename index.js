@@ -20,7 +20,8 @@ db.once("open", () => {
     // Mongoose way to make index
     userSchema.index({
         name: "text", // text index,
-        other: 1 // ascending number index, -1 for descending
+        other: 1, // ascending number index, -1 for descending
+        "something.desc": "text"
     }, {
         name: "Example index",
         weights: {
