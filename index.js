@@ -14,9 +14,41 @@ db.once("open", () => {
         }
     })
     const User = mongoose.model("User", userSchema, "ooo")
+    const collection = db.collection("ooo")
+    // Full text indexing
+    userSchema.set({ autoIndex: false }) // disable auto indexing for performance
+    // Mongoose way to make index
+    userSchema.index({
+        name: "text", // text index,
+        other: 1 // ascending number index, -1 for descending
+    }, {
+        name: "Example index",
+        weights: {
+            name: 10,
+            something: 2
+        }
+    })
+
+    // Mongodb way
+    collection.find({
+        "somefield.somevalue": { $gt: 20 } // greater than 20
+    }, {
+        score: { $meta: "textScore" }
+    }).sort({ score: { $meta: "textScore" } }) // it will sort by textScore by default
+
+    // Mongoose way
+    User.find({
+        $text: { $search: "text to look for" } // this is good for finding in any field (indexed)
+        // name: "text to look for" // specific field
+        // name: { $gt: 20 } // search operators
+    }, {
+        score: { $meta: "textScore" }
+    })
+    .sort({ score: { $meta: "textScore" } })
+
     const dan = new User({ name: "Dane" })
     // console.log(dan.name)
-    const collection = db.collection("ooo")
+
     // collection.countDocuments()
     // .then((count) => {
     //     console.log(count, "devices")
