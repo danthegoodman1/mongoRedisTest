@@ -27,7 +27,8 @@ db.once("open", () => {
         weights: {
             name: 10,
             something: 2
-        }
+        },
+        unique: true // prevent duplicate indexes
     })
 
     // Mongodb way
@@ -40,6 +41,9 @@ db.once("open", () => {
     // Mongoose way
     User.find({
         $text: { $search: "text to look for" } // this is good for finding in any field (indexed)
+        // see: https://docs.mongodb.com/manual/text-search/
+        // https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+        // https://stackoverflow.com/questions/28775051/best-way-to-perform-a-full-text-search-in-mongodb-and-mongoose
         // name: "text to look for" // specific field
         // name: { $gt: 20 } // search operators
     }, {
